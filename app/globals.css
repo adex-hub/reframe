@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+/* Theme tokens. Light by default; dark follows the system unless the toggle forces a theme. */
+:root {
+  --bg: #e9ecf1; --panel: #f7f8fa; --ink: #1a2132; --mute: #5d667a;
+  --acc: #0e7a76; --accink: #fff; --line: #c9cfdb;
+  color-scheme: light dark;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11141b; --panel: #1a1f2a; --ink: #e8ebf2; --mute: #9aa3b8;
+    --acc: #4cc3bd; --accink: #0b1514; --line: #2c3446;
+  }
+}
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #11141b; --panel: #1a1f2a; --ink: #e8ebf2; --mute: #9aa3b8;
+  --acc: #4cc3bd; --accink: #0b1514; --line: #2c3446;
+}
+
+/* Expose the tokens as Tailwind colours: bg-canvas, bg-panel, text-ink, text-mute, bg-accent, text-on-accent, border-line. */
+@theme inline {
+  --color-canvas: var(--bg);
+  --color-panel: var(--panel);
+  --color-ink: var(--ink);
+  --color-mute: var(--mute);
+  --color-accent: var(--acc);
+  --color-on-accent: var(--accink);
+  --color-line: var(--line);
+}
+@theme {
+  --color-danger: #d64545;
+  --font-sans: Figtree, system-ui, sans-serif;
+  --font-serif: Newsreader, Georgia, serif;
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  /* 960px: where the gallery moves beside the puzzle. */
+  --breakpoint-lg: 60rem;
+}
+
+@layer base {
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body { min-height: 100vh; background: var(--bg); color: var(--ink); font-family: var(--font-sans); line-height: 1.5; }
+  button, select { cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--acc); outline-offset: 2px; }
+  select option { color: var(--ink); background-color: var(--panel); }
+  body:has(dialog[open]) { overflow: hidden; }
+}
