@@ -84,7 +84,8 @@ export function usePuzzle({ size: n, puzzleKey, keyboard, announce }: Options) {
         ArrowLeft: [0, 1], ArrowRight: [0, -1], ArrowUp: [1, 0], ArrowDown: [-1, 0],
       };
       const v = d[e.key];
-      if (!v || done || !keyboard) return;
+      // defaultPrevented: something else (e.g. an open menu) already used the key.
+      if (!v || done || !keyboard || e.defaultPrevented) return;
       e.preventDefault();
       const b = tiles.indexOf(n * n - 1);
       const r = Math.floor(b / n) + v[0], c = (b % n) + v[1];

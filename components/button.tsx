@@ -1,11 +1,12 @@
 import { cx } from "@/utils/cx";
 
-type Variant = "default" | "primary";
+type Variant = "default" | "primary" | "danger";
 type Shape = "text" | "icon" | "round";
 
 const VARIANTS: Record<Variant, string> = {
   default: "border-line bg-panel",
   primary: "border-accent bg-accent font-semibold text-on-accent",
+  danger: "border-danger bg-danger font-semibold text-white",
 };
 const SHAPES: Record<Shape, string> = {
   text: "px-4",
