@@ -5,10 +5,12 @@ type Props = {
   tiles: number[];
   image: string;
   done: boolean;
+  /** Show each tile's home number in its corner. */
+  hints: boolean;
   onTap: (position: number) => void;
 };
 
-export function PuzzleBoard({ size: n, tiles, image, done, onTap }: Props) {
+export function PuzzleBoard({ size: n, tiles, image, done, hints, onTap }: Props) {
   const blankPos = tiles.indexOf(n * n - 1);
   const br = Math.floor(blankPos / n), bc = blankPos % n;
 
@@ -47,7 +49,19 @@ export function PuzzleBoard({ size: n, tiles, image, done, onTap }: Props) {
                 backgroundSize: `${n * 100}% ${n * 100}%`,
                 backgroundPosition: `${(sc * 100) / (n - 1)}% ${(sr * 100) / (n - 1)}%`,
               }}
-            />
+            >
+              {hints && !isBlank && (
+                <span
+                  className={cx(
+                    "pointer-events-none absolute top-1 left-1 min-w-5 rounded-full bg-black/60 px-1.5 text-center text-[.75rem] leading-5 font-semibold text-white",
+                    "transition-opacity duration-500 group-data-won:opacity-0",
+                  )}
+                  aria-hidden="true"
+                >
+                  {id + 1}
+                </span>
+              )}
+            </button>
           );
         })}
       </div>

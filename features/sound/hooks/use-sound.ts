@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { readJson, writeJson } from "@/lib/storage";
+import { isTyping } from "@/utils/is-typing";
 import { SoundEngine } from "../lib/engine";
 import { moodFor } from "../lib/moods";
 
@@ -16,9 +17,6 @@ type Options = {
   bumps: number;
   done: boolean;
 };
-
-const isTyping = (el: EventTarget | null) =>
-  el instanceof HTMLElement && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName));
 
 /** Sound is on by default; it starts on the first tap or key press, and the choice to mute is remembered. */
 export function useSound({ src, tiles, moves, bumps, done }: Options) {

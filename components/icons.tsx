@@ -34,5 +34,7 @@ export const PencilIcon = (p: Props) => <Icon {...p}><path d="M4 20h4L19 9l-4-4L
 export const TrashIcon = (p: Props) => <Icon {...p}><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" /></Icon>;
 export const SpeakerIcon = (p: Props) => <Icon {...p}><path d="M11 5 6 9H3v6h3l5 4V5z" /><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" /></Icon>;
 export const SpeakerOffIcon = (p: Props) => <Icon {...p}><path d="M11 5 6 9H3v6h3l5 4V5z" /><path d="m16 9 6 6M22 9l-6 6" /></Icon>;
+export const BulbIcon = (p: Props) => <Icon {...p}><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.4 1 1.1 1 1.9V16h5v-.2c0-.8.4-1.5 1-1.9A6 6 0 0 0 12 3z" /><path d="M12 7a3 3 0 0 1 3 3" /></Icon>;
+export const BulbOffIcon = (p: Props) => <Icon {...p}><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.4 1 1.1 1 1.9V16h5v-.2c0-.8.4-1.5 1-1.9A6 6 0 0 0 12 3z" /><path d="m3 3 18 18" /></Icon>;
 export const CropSmallIcon = (p: Props) => <Icon {...p}><rect x="8" y="8" width="8" height="8" rx="1" /></Icon>;
 export const CropLargeIcon = (p: Props) => <Icon {...p}><rect x="4" y="4" width="16" height="16" rx="2" /></Icon>;
