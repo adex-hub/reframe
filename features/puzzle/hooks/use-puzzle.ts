@@ -17,6 +17,8 @@ export function usePuzzle({ size: n, puzzleKey, keyboard, announce }: Options) {
   const [tiles, setTiles] = useState(() => solvedTiles(n));
   const [history, setHistory] = useState<number[][]>([]);
   const [moves, setMoves] = useState(0);
+  /** Taps on tiles that couldn't move; counted so the sound can react to them. */
+  const [bumps, setBumps] = useState(0);
   const [secs, setSecs] = useState(0);
   const [started, setStarted] = useState(false);
   const [done, setDone] = useState(false);
@@ -59,6 +61,7 @@ export function usePuzzle({ size: n, puzzleKey, keyboard, announce }: Options) {
     if (done) return;
     const next = slide(tiles, n, p);
     if (!next) {
+      setBumps((b) => b + 1);
       announce("That tile is stuck");
       return;
     }
@@ -96,5 +99,5 @@ export function usePuzzle({ size: n, puzzleKey, keyboard, announce }: Options) {
     return () => window.removeEventListener("keydown", onKey);
   });
 
-  return { tiles, moves, secs, done, tap, undo, reset };
+  return { tiles, moves, bumps, secs, done, tap, undo, reset };
 }

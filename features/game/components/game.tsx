@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { ARTWORKS, ArtworkCaption, GalleryGrid, type Artwork } from "@/features/gallery";
 import { PuzzleBoard, PuzzleControls, PuzzleTimer, WinBanner, usePuzzle } from "@/features/puzzle";
+import { SoundToggle, useSound } from "@/features/sound";
 import { ThemeToggle } from "@/features/theme";
 import { EditArtworkModal, UploadModal, useUploads, type ArtworkDetails, type NewUpload, type UploadedArtwork } from "@/features/uploads";
 import { GameHeader } from "./game-header";
@@ -21,6 +22,7 @@ export function Game() {
   const art = artworks[Math.min(selected, artworks.length - 1)];
   const modalOpen = adding || !!editing || !!deleting;
   const puzzle = usePuzzle({ size, puzzleKey: art.src, keyboard: !modalOpen, announce: setLive });
+  const sound = useSound({ src: art.src, tiles: puzzle.tiles, moves: puzzle.moves, bumps: puzzle.bumps, done: puzzle.done });
 
   const findUpload = (id: string) => uploads.find((u) => u.id === id) ?? null;
   const unsaved = " It couldn't be saved on this device, so it will be lost after a reload.";
@@ -84,7 +86,7 @@ export function Game() {
       />
 
       <section className="lg:col-start-2 lg:row-start-2 lg:max-h-full lg:overflow-y-auto lg:pb-6">
-        <ArtworkCaption artwork={art} />
+        <ArtworkCaption artwork={art} action={<SoundToggle enabled={sound.enabled} onToggle={sound.toggle} />} />
         <PuzzleBoard size={size} tiles={puzzle.tiles} image={art.src} done={puzzle.done} onTap={puzzle.tap} />
         <PuzzleControls moves={puzzle.moves} size={size} onSizeChange={setSize} onUndo={puzzle.undo} onReshuffle={puzzle.reset} />
         {puzzle.done && (

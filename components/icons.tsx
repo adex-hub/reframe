@@ -32,5 +32,7 @@ export const InfoIcon = (p: Props) => <Icon {...p}><circle cx="12" cy="12" r="9"
 export const MoreIcon = (p: Props) => <Icon {...p}><circle cx="5" cy="12" r="1" /><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /></Icon>;
 export const PencilIcon = (p: Props) => <Icon {...p}><path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4" /></Icon>;
 export const TrashIcon = (p: Props) => <Icon {...p}><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" /></Icon>;
+export const SpeakerIcon = (p: Props) => <Icon {...p}><path d="M11 5 6 9H3v6h3l5 4V5z" /><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" /></Icon>;
+export const SpeakerOffIcon = (p: Props) => <Icon {...p}><path d="M11 5 6 9H3v6h3l5 4V5z" /><path d="m16 9 6 6M22 9l-6 6" /></Icon>;
 export const CropSmallIcon = (p: Props) => <Icon {...p}><rect x="8" y="8" width="8" height="8" rx="1" /></Icon>;
 export const CropLargeIcon = (p: Props) => <Icon {...p}><rect x="4" y="4" width="16" height="16" rx="2" /></Icon>;
