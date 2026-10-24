@@ -4,7 +4,6 @@ import { SpeakerIcon, SpeakerOffIcon } from "@/components/icons";
 export function SoundToggle({ enabled, onToggle }: { enabled: boolean; onToggle: () => void }) {
   return (
     <Button
-      variant="ghost"
       shape="icon"
       onClick={onToggle}
       aria-label="Sound"
