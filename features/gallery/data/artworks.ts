@@ -8,7 +8,7 @@ export const ARTWORKS: Artwork[] = [
   { title: "Girl with a Pearl Earring", artist: "Johannes Vermeer, c. 1665", src: "/art/pearl-earring.jpg" },
   { title: "The Creation of Adam", artist: "Michelangelo, c. 1512", src: "/art/creation-of-adam.jpg" },
   { title: "Café Terrace at Night", artist: "Vincent van Gogh, 1888", src: "/art/cafe-terrace.jpg" },
-  { title: "Water Lilies", artist: "Claude Monet, c. 1925", src: "/art/water-lilies.jpg" },
+  { title: "Christ Healing the Blind", artist: "El Greco, c. 1570", src: "/art/healing-the-blind.jpg" },
   { title: "Wanderer above the Sea of Fog", artist: "Caspar David Friedrich, c. 1818", src: "/art/wanderer.jpg" },
   { title: "A Sunday on La Grande Jatte", artist: "Georges Seurat, 1884", src: "/art/grande-jatte.jpg" },
   { title: "Juan de Pareja", artist: "Diego Velázquez, 1650", src: "/art/juan-de-pareja.jpg" },

@@ -62,7 +62,12 @@ const MOODS: Record<string, Mood> = {
     chords: [[0, 4, 7, 11], [5, 9, 12, 16], [2, 5, 9, 12], [7, 11, 14, 17]],
     pad: "triangle", pluck: "triangle", chordSecs: 7, cutoff: 1000, sparkle: 0.5,
   },
-  "/art/water-lilies.jpg": LILIES,
+  // Hopeful, church-like Mixolydian.
+  "/art/healing-the-blind.jpg": {
+    root: 55, scale: [0, 2, 4, 5, 7, 9, 10],
+    chords: [[0, 7, 12, 16], [-2, 5, 10, 14], [5, 9, 12, 17], [0, 4, 7, 14]],
+    pad: "triangle", pluck: "sine", chordSecs: 10, cutoff: 800, sparkle: 0.4,
+  },
   "/art/water-lilies-1897.jpg": LILIES,
   // Romantic minor, looking out over the fog.
   "/art/wanderer.jpg": {
