@@ -1,6 +1,7 @@
 import { useEffect } from "react";
+import { Delete02Icon, PencilEdit01Icon } from "@hugeicons/core-free-icons";
 import { ActionMenu } from "@/components/action-menu";
-import { PencilIcon, TrashIcon } from "@/components/icons";
+import { Icon } from "@/components/icon";
 import { cx } from "@/utils/cx";
 import { useScrollEdges } from "../hooks/use-scroll-edges";
 import type { Artwork } from "../types";
@@ -72,8 +73,8 @@ export function GalleryGrid({ artworks, selected, onSelect, onAdd, onEdit, onDel
                   label={`More actions for ${a.title}`}
                   className={MORE_BUTTON}
                   items={[
-                    { label: "Edit details", icon: <PencilIcon className="size-4" />, onSelect: () => onEdit(a.id!) },
-                    { label: "Delete", icon: <TrashIcon className="size-4" />, danger: true, onSelect: () => onDelete(a.id!) },
+                    { label: "Edit details", icon: <Icon icon={PencilEdit01Icon} className="size-4" />, onSelect: () => onEdit(a.id!) },
+                    { label: "Delete", icon: <Icon icon={Delete02Icon} className="size-4" />, danger: true, onSelect: () => onDelete(a.id!) },
                   ]}
                 />
               )}

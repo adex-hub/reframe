@@ -1,4 +1,5 @@
-import { UploadIcon } from "@/components/icons";
+import { Upload01Icon } from "@hugeicons/core-free-icons";
+import { Icon } from "@/components/icon";
 import { cx } from "@/utils/cx";
 import { IMAGE_AREA } from "../constants";
 
@@ -14,7 +15,7 @@ export function DropZone({ over, onBrowse }: { over: boolean; onBrowse: () => vo
       )}
       onClick={onBrowse}
     >
-      <UploadIcon className="mb-1.5 size-7 text-mute" />
+      <Icon icon={Upload01Icon} className="mb-1.5 size-7 text-mute" />
       <strong>Drop an image here</strong>
       <small className="text-mute">or click to browse your files</small>
     </button>

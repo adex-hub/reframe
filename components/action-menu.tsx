@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { MoreIcon } from "./icons";
+import { MoreHorizontalIcon } from "@hugeicons/core-free-icons";
 import { cx } from "@/utils/cx";
+import { Icon } from "./icon";
 
 export type ActionMenuItem = { label: string; icon?: React.ReactNode; danger?: boolean; onSelect: () => void };
 
@@ -75,7 +76,7 @@ export function ActionMenu({ label, items, className }: Props) {
         data-open={open || undefined}
         className={className}
       >
-        <MoreIcon />
+        <Icon icon={MoreHorizontalIcon} />
       </button>
       <div
         ref={menuRef}

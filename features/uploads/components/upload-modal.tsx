@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { InformationCircleIcon } from "@hugeicons/core-free-icons";
 import { Button } from "@/components/button";
-import { InfoIcon } from "@/components/icons";
+import { Icon } from "@/components/icon";
 import { Modal } from "@/components/modal";
 import type { Visibility } from "@/features/gallery";
 import { OUTPUT_SIZE, VISIBILITY_INFO } from "../constants";
@@ -87,7 +88,7 @@ export function UploadModal({ open, onClose, onUpload }: Props) {
         {error && <p className="m-0 text-[.85rem] text-danger" role="alert">{error}</p>}
 
         <p className="m-0 flex gap-2 text-[.85rem] text-mute" aria-live="polite">
-          <InfoIcon className="mt-px size-[18px]" />
+          <Icon icon={InformationCircleIcon} className="mt-px size-[18px]" />
           <span>{VISIBILITY_INFO[visibility]}</span>
         </p>
 

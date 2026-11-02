@@ -1,5 +1,6 @@
+import { ShuffleIcon, Undo03Icon } from "@hugeicons/core-free-icons";
 import { Button, buttonClass } from "@/components/button";
-import { ShuffleIcon, UndoIcon } from "@/components/icons";
+import { Icon } from "@/components/icon";
 import { GRID_SIZES } from "../constants";
 
 type Props = {
@@ -24,10 +25,10 @@ export function PuzzleControls({ moves, size, onSizeChange, onUndo, onReshuffle 
           {GRID_SIZES.map((s) => (<option key={s} value={s}>{s}×{s}</option>))}
         </select>
         <Button shape="icon" onClick={onUndo} aria-label="Undo" title="Undo">
-          <UndoIcon />
+          <Icon icon={Undo03Icon} />
         </Button>
         <Button shape="icon" onClick={onReshuffle} aria-label="Reshuffle" title="Reshuffle">
-          <ShuffleIcon />
+          <Icon icon={ShuffleIcon} />
         </Button>
       </div>
     </div>

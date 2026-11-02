@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { CropLargeIcon, CropSmallIcon } from "@/components/icons";
+import { SquareIcon } from "@hugeicons/core-free-icons";
+import { Icon } from "@/components/icon";
 import { clamp } from "@/utils/clamp";
 import { cx } from "@/utils/cx";
 import { IMAGE_AREA } from "../constants";
@@ -159,7 +160,7 @@ export function CropEditor({ img, url, crop, onChange, over, onReplace }: Props)
         )}
       </div>
       <div className="flex items-center gap-2.5 text-mute">
-        <CropSmallIcon className="size-[18px]" />
+        <Icon icon={SquareIcon} className="size-3" />
         <input
           type="range"
           min={1 / MAX_ZOOM}
@@ -170,7 +171,7 @@ export function CropEditor({ img, url, crop, onChange, over, onReplace }: Props)
           className="flex-1 accent-accent"
           onChange={(e) => onChange(fitCrop(img, { ...crop, z: 1 / Number(e.target.value) }))}
         />
-        <CropLargeIcon className="size-[18px]" />
+        <Icon icon={SquareIcon} className="size-[18px]" />
         <button type="button" className="border-0 bg-transparent py-1.5 pr-0.5 pl-2 font-semibold text-accent" onClick={onReplace}>Replace</button>
       </div>
     </>
