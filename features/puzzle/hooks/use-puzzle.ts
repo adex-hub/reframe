@@ -22,6 +22,8 @@ export function usePuzzle({ size: n, puzzleKey, keyboard, announce }: Options) {
   const [secs, setSecs] = useState(0);
   const [started, setStarted] = useState(false);
   const [done, setDone] = useState(false);
+  /** Goes up with every fresh shuffle, so per-game state elsewhere (like hint use) can reset. */
+  const [round, setRound] = useState(0);
 
   function reset() {
     setTiles(shuffled(n));
@@ -30,6 +32,7 @@ export function usePuzzle({ size: n, puzzleKey, keyboard, announce }: Options) {
     setSecs(0);
     setStarted(false);
     setDone(false);
+    setRound((r) => r + 1);
     announce(`New puzzle, ${n} by ${n}`);
   }
 
@@ -99,5 +102,5 @@ export function usePuzzle({ size: n, puzzleKey, keyboard, announce }: Options) {
     return () => window.removeEventListener("keydown", onKey);
   });
 
-  return { tiles, moves, bumps, secs, done, tap, undo, reset };
+  return { tiles, moves, bumps, secs, done, round, tap, undo, reset };
 }

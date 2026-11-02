@@ -22,7 +22,7 @@ export function Game() {
   const art = artworks[Math.min(selected, artworks.length - 1)];
   const modalOpen = adding || !!editing || !!deleting;
   const puzzle = usePuzzle({ size, puzzleKey: art.src, keyboard: !modalOpen, announce: setLive });
-  const hints = useHints();
+  const hints = useHints({ size, round: puzzle.round, locked: puzzle.done });
   const sound = useSound({ src: art.src, tiles: puzzle.tiles, moves: puzzle.moves, bumps: puzzle.bumps, done: puzzle.done });
 
   const findUpload = (id: string) => uploads.find((u) => u.id === id) ?? null;
@@ -86,27 +86,30 @@ export function Game() {
         onCancel={() => setDeleting(null)}
       />
 
-      <section className="lg:col-start-2 lg:row-start-2 lg:max-h-full lg:overflow-y-auto lg:pb-6">
+      {/* The column scrolls on wide screens, which clips anything past its edges. The padding (cancelled
+          out by the negative margin) leaves room for focus outlines on buttons at the edge. */}
+      <section className="lg:col-start-2 lg:row-start-2 lg:-mx-1.5 lg:-mt-1.5 lg:max-h-full lg:overflow-y-auto lg:px-1.5 lg:pt-1.5 lg:pb-6">
         <ArtworkCaption
           artwork={art}
           action={
             <>
-              <HintToggle on={hints.on} onToggle={hints.toggle} />
+              {hints.available && <HintToggle on={hints.on} disabled={puzzle.done} onToggle={hints.toggle} />}
               <SoundToggle enabled={sound.enabled} onToggle={sound.toggle} />
             </>
           }
         />
-        <PuzzleBoard size={size} tiles={puzzle.tiles} image={art.src} done={puzzle.done} hints={hints.on} onTap={puzzle.tap} />
+        <PuzzleBoard size={size} tiles={puzzle.tiles} image={art.src} done={puzzle.done} hints={hints.shown} onTap={puzzle.tap} />
         <PuzzleControls moves={puzzle.moves} size={size} onSizeChange={setSize} onUndo={puzzle.undo} onReshuffle={puzzle.reset} />
         {puzzle.done && (
           <WinBanner
             secs={puzzle.secs}
             moves={puzzle.moves}
             credit={`${art.title}, ${art.artist}`}
+            hints={hints.available ? (hints.used ? "used" : "unused") : undefined}
             onNext={() => setSelected((selected + 1) % artworks.length)}
           />
         )}
-        <p className="mt-4 text-[.8rem] text-mute">Tap a tile to slide it, or use the arrow keys.</p>
+        {!puzzle.done && <p className="mt-4 text-[.8rem] text-mute">Tap a tile to slide it, or use the arrow keys.</p>}
       </section>
       <div className="sr-only" aria-live="polite">{live}</div>
     </main>
