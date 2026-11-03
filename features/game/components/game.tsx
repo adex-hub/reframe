@@ -2,16 +2,20 @@
 
 import { useState } from "react";
 import { ConfirmDialog } from "@/components/confirm-dialog";
-import { ARTWORKS, ArtworkCaption, GalleryGrid, type Artwork } from "@/features/gallery";
+import { ARTWORKS, ArtworkCaption, GalleryGrid, useStartPicture, type Artwork } from "@/features/gallery";
 import { GRID_SIZES, HintToggle, PlayTip, PuzzleBoard, PuzzleControls, PuzzleTimer, WinBanner, useBest, useHints, usePuzzle } from "@/features/puzzle";
 import { SoundToggle, useSound } from "@/features/sound";
 import { ThemeToggle } from "@/features/theme";
 import { EditArtworkModal, UploadModal, useUploads, type ArtworkDetails, type NewUpload, type UploadedArtwork } from "@/features/uploads";
+import { cx } from "@/utils/cx";
 import { GameHeader } from "./game-header";
 
 export function Game() {
   const [size, setSize] = useState(3);
-  const [selected, setSelected] = useState(0);
+  const [picked, setSelected] = useStartPicture(ARTWORKS.length);
+  // Until the random first picture is picked, the puzzle area stays invisible so the default can't flash.
+  const ready = picked !== null;
+  const selected = picked ?? 0;
   const [adding, setAdding] = useState(false);
   const [editing, setEditing] = useState<UploadedArtwork | null>(null);
   const [deleting, setDeleting] = useState<UploadedArtwork | null>(null);
@@ -74,7 +78,7 @@ export function Game() {
       <GalleryGrid
         className="lg:col-start-1 lg:row-start-2"
         artworks={artworks}
-        selected={selected}
+        selected={ready ? selected : -1}
         onSelect={setSelected}
         onAdd={() => setAdding(true)}
         onEdit={(id) => setEditing(findUpload(id))}
@@ -93,7 +97,12 @@ export function Game() {
 
       {/* The column scrolls on wide screens, which clips anything past its edges. The padding (cancelled
           out by the negative margin) leaves room for focus outlines on buttons at the edge. */}
-      <section className="lg:col-start-2 lg:row-start-2 lg:-mx-1.5 lg:-mt-1.5 lg:max-h-full lg:overflow-y-auto lg:px-1.5 lg:pt-1.5 lg:pb-6">
+      <section
+        className={cx(
+          "lg:col-start-2 lg:row-start-2 lg:-mx-1.5 lg:-mt-1.5 lg:max-h-full lg:overflow-y-auto lg:px-1.5 lg:pt-1.5 lg:pb-6",
+          !ready && "invisible",
+        )}
+      >
         <ArtworkCaption
           artwork={art}
           action={

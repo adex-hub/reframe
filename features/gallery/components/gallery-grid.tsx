@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Delete02Icon, PencilEdit01Icon } from "@hugeicons/core-free-icons";
 import { ActionMenu } from "@/components/action-menu";
 import { Icon } from "@/components/icon";
@@ -35,6 +35,7 @@ const MORE_BUTTON =
 
 type Props = {
   artworks: Artwork[];
+  /** -1 while nothing is picked yet. */
   selected: number;
   onSelect: (index: number) => void;
   onAdd: () => void;
@@ -48,8 +49,15 @@ export function GalleryGrid({ artworks, selected, onSelect, onAdd, onEdit, onDel
   const strip = useScrollEdges<HTMLDivElement>();
 
   // Keep the selected picture in view, e.g. after an upload is appended off the end of the strip.
+  // The first pick (random, on load) jumps straight there, centred, so the strip opens already
+  // showing it; later changes glide just far enough.
+  const placed = useRef(false);
   useEffect(() => {
-    strip.ref.current?.children[selected]?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
+    const card = strip.ref.current?.children[selected];
+    if (!card) return;
+    const first = !placed.current;
+    placed.current = true;
+    card.scrollIntoView({ block: "nearest", inline: first ? "center" : "nearest", behavior: first ? "instant" : "smooth" });
   }, [selected, strip.ref]);
 
   return (
