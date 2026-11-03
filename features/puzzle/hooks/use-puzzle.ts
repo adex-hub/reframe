@@ -19,6 +19,8 @@ export function usePuzzle({ size: n, puzzleKey, keyboard, announce }: Options) {
   const [moves, setMoves] = useState(0);
   /** Taps on tiles that couldn't move; counted so the sound can react to them. */
   const [bumps, setBumps] = useState(0);
+  /** Every tile slide, undos included; never resets. Moves can go down, so sound listens to this instead. */
+  const [slides, setSlides] = useState(0);
   const [secs, setSecs] = useState(0);
   const [started, setStarted] = useState(false);
   const [done, setDone] = useState(false);
@@ -71,6 +73,7 @@ export function usePuzzle({ size: n, puzzleKey, keyboard, announce }: Options) {
     setHistory((h) => [...h, tiles]);
     setTiles(next);
     setMoves((m) => m + 1);
+    setSlides((s) => s + 1);
     setStarted(true);
     if (!isSolved(next)) announce(`Moved. ${moves + 1} moves`);
   }
@@ -79,8 +82,10 @@ export function usePuzzle({ size: n, puzzleKey, keyboard, announce }: Options) {
     if (done || !history.length) return;
     setTiles(history[history.length - 1]);
     setHistory((h) => h.slice(0, -1));
-    setMoves((m) => m + 1);
-    announce("Undone");
+    // Undo takes the move back, so the count always matches the moves that stand.
+    setMoves((m) => m - 1);
+    setSlides((s) => s + 1);
+    announce(`Undone. ${moves - 1} ${moves - 1 === 1 ? "move" : "moves"}`);
   }
 
   // Arrow keys: the tile on the opposite side of the gap slides into it.
@@ -102,5 +107,5 @@ export function usePuzzle({ size: n, puzzleKey, keyboard, announce }: Options) {
     return () => window.removeEventListener("keydown", onKey);
   });
 
-  return { tiles, moves, bumps, secs, done, round, tap, undo, reset };
+  return { tiles, moves, bumps, slides, secs, started, done, round, tap, undo, reset };
 }

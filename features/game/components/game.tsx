@@ -29,7 +29,7 @@ export function Game() {
   const hints = useHints({ size, round: puzzle.round, locked: puzzle.done });
   const bestLine = useBest({ size, round: puzzle.round, done: puzzle.done, secs: puzzle.secs, moves: puzzle.moves, hinted: hints.used });
   const nextSize = GRID_SIZES[GRID_SIZES.indexOf(size) + 1];
-  const sound = useSound({ src: art.src, tiles: puzzle.tiles, moves: puzzle.moves, bumps: puzzle.bumps, done: puzzle.done });
+  const sound = useSound({ src: art.src, tiles: puzzle.tiles, slides: puzzle.slides, bumps: puzzle.bumps, done: puzzle.done });
 
   const findUpload = (id: string) => uploads.find((u) => u.id === id) ?? null;
   const unsaved = " It couldn't be saved on this device, so it will be lost after a reload.";
@@ -128,7 +128,7 @@ export function Game() {
             onTrySize={setSize}
           />
         )}
-        {!puzzle.done && <PlayTip moved={puzzle.moves > 0} />}
+        {!puzzle.done && <PlayTip moved={puzzle.started} />}
       </section>
       <div className="sr-only" aria-live="polite">{live}</div>
     </main>

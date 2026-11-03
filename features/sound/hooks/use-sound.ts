@@ -12,14 +12,15 @@ type Options = {
   /** The painting being solved; picks the mood. */
   src: string;
   tiles: number[];
-  moves: number;
+  /** Counts every tile slide (undos too), so each one gets a note. */
+  slides: number;
   /** Count of taps on tiles that couldn't move. */
   bumps: number;
   done: boolean;
 };
 
 /** Sound is on by default; it starts on the first tap or key press, and the choice to mute is remembered. */
-export function useSound({ src, tiles, moves, bumps, done }: Options) {
+export function useSound({ src, tiles, slides, bumps, done }: Options) {
   const [enabled, setEnabled] = useState(true);
   const engineRef = useRef<SoundEngine | null>(null);
 
@@ -66,18 +67,18 @@ export function useSound({ src, tiles, moves, bumps, done }: Options) {
   }, [src]);
 
   // Turn board changes into sounds. Only increases count, so a fresh shuffle stays quiet.
-  const prev = useRef({ moves, placed, bumps, done });
+  const prev = useRef({ slides, placed, bumps, done });
   useEffect(() => {
     const engine = engineRef.current;
     const p = prev.current;
     if (engine) {
       engine.setProgress(progress);
-      if (moves > p.moves) engine.slide(placed > p.placed);
+      if (slides > p.slides) engine.slide(placed > p.placed);
       if (bumps > p.bumps) engine.blocked();
       if (done && !p.done) engine.solve();
     }
-    prev.current = { moves, placed, bumps, done };
-  }, [moves, placed, bumps, done, progress]);
+    prev.current = { slides, placed, bumps, done };
+  }, [slides, placed, bumps, done, progress]);
 
   // "M" mutes or unmutes, unless someone is typing.
   useEffect(() => {
