@@ -30,12 +30,13 @@
   --color-accent: var(--acc);
   --color-on-accent: var(--accink);
   --color-line: var(--line);
+  /* Fonts come from next/font (see app/layout.tsx), which sets these variables on <html>. */
+  --font-sans: var(--font-figtree), system-ui, sans-serif;
+  --font-serif: var(--font-newsreader), Georgia, serif;
+  --font-display: var(--font-space-grotesk), system-ui, sans-serif;
 }
 @theme {
   --color-danger: #d64545;
-  --font-sans: Figtree, system-ui, sans-serif;
-  --font-serif: Newsreader, Georgia, serif;
-  --font-display: "Space Grotesk", system-ui, sans-serif;
   /* 960px: where the gallery moves beside the puzzle. */
   --breakpoint-lg: 60rem;
 }
