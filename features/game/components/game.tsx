@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { ARTWORKS, ArtworkCaption, GalleryGrid, type Artwork } from "@/features/gallery";
-import { GRID_SIZES, HintToggle, PuzzleBoard, PuzzleControls, PuzzleTimer, WinBanner, useBest, useHints, usePuzzle } from "@/features/puzzle";
+import { GRID_SIZES, HintToggle, PlayTip, PuzzleBoard, PuzzleControls, PuzzleTimer, WinBanner, useBest, useHints, usePuzzle } from "@/features/puzzle";
 import { SoundToggle, useSound } from "@/features/sound";
 import { ThemeToggle } from "@/features/theme";
 import { EditArtworkModal, UploadModal, useUploads, type ArtworkDetails, type NewUpload, type UploadedArtwork } from "@/features/uploads";
@@ -119,7 +119,7 @@ export function Game() {
             onTrySize={setSize}
           />
         )}
-        {!puzzle.done && <p className="mt-4 text-[.8rem] text-mute">Tap a tile to slide it, or use the arrow keys.</p>}
+        {!puzzle.done && <PlayTip moved={puzzle.moves > 0} />}
       </section>
       <div className="sr-only" aria-live="polite">{live}</div>
     </main>

@@ -1,4 +1,5 @@
 export { HintToggle } from "./components/hint-toggle";
+export { PlayTip } from "./components/play-tip";
 export { PuzzleBoard } from "./components/puzzle-board";
 export { PuzzleControls } from "./components/puzzle-controls";
 export { PuzzleTimer } from "./components/puzzle-timer";
