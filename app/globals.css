@@ -40,6 +40,9 @@
   --breakpoint-lg: 60rem;
 }
 
+/* Phones turned sideways: too short for the stacked layout, too narrow for the wide one. */
+@custom-variant short (@media (orientation: landscape) and (max-height: 31.25rem) and (max-width: 59.999rem));
+
 @layer base {
   html { scroll-padding-top: env(safe-area-inset-top, 0px); }
   body { min-height: 100vh; background: var(--bg); color: var(--ink); font-family: var(--font-sans); line-height: 1.5; }

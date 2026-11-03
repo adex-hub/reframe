@@ -29,7 +29,7 @@ export function WinBanner({ secs, moves, hints, best, nextSize, onNext, onTrySiz
   }, []);
 
   return (
-    <div className="mt-3.5 rounded-[10px] border border-line bg-panel p-3.5" ref={ref} role="status">
+    <div className="mt-3.5 scroll-mb-4 rounded-[10px] border border-line bg-panel p-3.5" ref={ref} role="status">
       <strong className="font-serif text-[1.2rem] leading-[normal] font-medium">
         {praise} You reframed it in {formatDuration(secs)} and {moves} {moves === 1 ? "move" : "moves"}
         {hints === "used" ? " using hints" : hints === "unused" ? " without hints" : ""}.
