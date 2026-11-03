@@ -4,17 +4,23 @@ import { useState } from "react";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { ARTWORKS, ArtworkCaption, GalleryGrid, useStartPicture, type Artwork } from "@/features/gallery";
 import { GRID_SIZES, HintToggle, PlayTip, PuzzleBoard, PuzzleControls, PuzzleTimer, WinBanner, useBest, useHints, usePuzzle } from "@/features/puzzle";
+import { LoadingScreen, useIntro, usePreloaded } from "@/features/loading";
 import { SoundToggle, useSound } from "@/features/sound";
 import { ThemeToggle } from "@/features/theme";
 import { EditArtworkModal, UploadModal, useUploads, type ArtworkDetails, type NewUpload, type UploadedArtwork } from "@/features/uploads";
 import { cx } from "@/utils/cx";
 import { GameHeader } from "./game-header";
 
+const ARTWORK_SRCS = ARTWORKS.map((a) => a.src);
+
 export function Game() {
   const [size, setSize] = useState(3);
   const [picked, setSelected] = useStartPicture(ARTWORKS.length);
   // Until the random first picture is picked, the puzzle area stays invisible so the default can't flash.
   const ready = picked !== null;
+  // First visit only: the loader stays up until every built-in painting has loaded (or a timeout passes).
+  const intro = useIntro();
+  const paintingsLoaded = usePreloaded(ARTWORK_SRCS);
   const selected = picked ?? 0;
   const [adding, setAdding] = useState(false);
   const [editing, setEditing] = useState<UploadedArtwork | null>(null);
@@ -25,7 +31,7 @@ export function Game() {
   const artworks: Artwork[] = [...ARTWORKS, ...uploads];
   const art = artworks[Math.min(selected, artworks.length - 1)];
   const modalOpen = adding || !!editing || !!deleting;
-  const puzzle = usePuzzle({ size, puzzleKey: art.src, keyboard: !modalOpen, announce: setLive });
+  const puzzle = usePuzzle({ size, puzzleKey: art.src, keyboard: !modalOpen && !intro.showing, announce: setLive });
   const hints = useHints({ size, round: puzzle.round, locked: puzzle.done });
   const bestLine = useBest({ size, round: puzzle.round, done: puzzle.done, secs: puzzle.secs, moves: puzzle.moves, hinted: hints.used });
   const nextSize = GRID_SIZES[GRID_SIZES.indexOf(size) + 1];
@@ -70,6 +76,7 @@ export function Game() {
         "lg:items-start lg:gap-x-12 lg:px-8 lg:pt-6 lg:pb-0 lg:[--stage:clamp(380px,calc(100vh_-_300px),560px)]"
       }
     >
+      {intro.showing && <LoadingScreen ready={paintingsLoaded && ready} onDone={intro.finish} />}
       <GameHeader className="lg:col-span-2">
         <PuzzleTimer secs={puzzle.secs} />
         <ThemeToggle />

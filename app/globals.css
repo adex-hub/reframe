@@ -15,6 +15,8 @@
   }
 }
 :root[data-theme="light"] { color-scheme: light; }
+/* Return visits skip the intro loader; see INTRO_SCRIPT in features/loading. */
+:root[data-intro-seen] [data-loader] { display: none; }
 :root[data-theme="dark"] {
   color-scheme: dark;
   --bg: #11141b; --panel: #1a1f2a; --ink: #e8ebf2; --mute: #9aa3b8;
