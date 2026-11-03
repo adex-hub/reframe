@@ -1,10 +1,17 @@
 import type { Mood } from "./moods";
 
 const VOLUME = 0.8;
+/** How quickly (seconds) the old mood fades out when the painting changes. */
+const FADE = 0.35;
 /** How far ahead (seconds) notes are scheduled on the audio clock, so timer jitter never shows. */
 const LOOKAHEAD = 1.5;
 
 type Voice = { osc: OscillatorNode; gain: GainNode };
+/**
+ * Everything one mood plays goes through its own bus, echo included, so switching paintings can
+ * fade the whole old mood out (even notes already scheduled ahead) while the new one comes in.
+ */
+type Bus = { input: GainNode; echo: DelayNode; out: GainNode };
 
 const hz = (midi: number) => 440 * Math.pow(2, (midi - 69) / 12);
 
@@ -17,7 +24,7 @@ export class SoundEngine {
   private ctx: AudioContext | null = null;
   private master!: GainNode;
   private filter!: BiquadFilterNode;
-  private echo!: DelayNode;
+  private bus!: Bus;
   private mood: Mood;
   private progress = 0;
   private enabled = true;
@@ -79,13 +86,19 @@ export class SoundEngine {
       this.timeline = [];
       if (!this.ctx) return;
       const t = this.ctx.currentTime;
-      // Let the old chord melt away and bring the new one in right after.
-      this.pad.forEach(({ osc, gain }) => {
-        gain.gain.cancelScheduledValues(t);
-        gain.gain.setTargetAtTime(0, t, 0.8);
-        osc.stop(t + 4);
-      });
-      this.nextChordAt = t + 0.3;
+      // Fade the old mood's whole bus out fast: its pad, any notes scheduled ahead and their
+      // echoes, so two keys never ring together. The new mood starts on a fresh bus, its first
+      // chord swelling in over the fade.
+      const old = this.bus;
+      old.out.gain.cancelScheduledValues(t);
+      old.out.gain.setValueAtTime(old.out.gain.value, t);
+      old.out.gain.linearRampToValueAtTime(0, t + FADE);
+      this.pad.forEach(({ osc }) => osc.stop(t + FADE + 0.05));
+      this.pad = [];
+      setTimeout(() => old.out.disconnect(), (FADE + 1) * 1000);
+      this.bus = this.newBus();
+      this.nextChordAt = t + FADE;
+      this.nextSparkleAt = t + FADE + 1.2;
       this.applyBrightness();
     });
   }
@@ -178,17 +191,28 @@ export class SoundEngine {
     this.filter = ctx.createBiquadFilter();
     this.filter.type = "lowpass";
     this.filter.Q.value = 0.7;
-    this.echo = ctx.createDelay(2);
-    this.echo.delayTime.value = 0.42;
-    const feedback = ctx.createGain();
-    feedback.gain.value = 0.35;
-    this.echo.connect(feedback).connect(this.echo);
     this.filter.connect(this.master);
-    this.echo.connect(this.master);
     this.master.connect(ctx.destination);
     this.ctx = ctx;
+    this.bus = this.newBus();
     this.nextChordAt = this.nextSparkleAt = ctx.currentTime + 0.1;
     this.applyBrightness();
+  }
+
+  /** A mood's bus: dry input and an echo, both through one output gain into the shared filter. */
+  private newBus(): Bus {
+    const ctx = this.ctx!;
+    const out = ctx.createGain();
+    out.connect(this.filter);
+    const input = ctx.createGain();
+    input.connect(out);
+    const echo = ctx.createDelay(2);
+    echo.delayTime.value = 0.42;
+    const feedback = ctx.createGain();
+    feedback.gain.value = 0.35;
+    echo.connect(feedback).connect(echo);
+    echo.connect(out);
+    return { input, echo, out };
   }
 
   /** Bring the audio in line with what's wanted: playing only when unlocked, enabled and visible. */
@@ -262,7 +286,7 @@ export class SoundEngine {
         gain.gain.linearRampToValueAtTime(level, t + 2);
         gain.gain.setValueAtTime(level, t + chordSecs);
         gain.gain.linearRampToValueAtTime(0, end);
-        osc.connect(gain).connect(this.filter);
+        osc.connect(gain).connect(this.bus.input);
         osc.start(t);
         osc.stop(end);
         const voice = { osc, gain };
@@ -327,12 +351,12 @@ export class SoundEngine {
     // Exponential ramps can't reach 0, so fade to just above it.
     gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
     osc.connect(gain);
-    gain.connect(this.filter);
-    if (echo === 1) gain.connect(this.echo);
+    gain.connect(this.bus.input);
+    if (echo === 1) gain.connect(this.bus.echo);
     else {
       const send = ctx.createGain();
       send.gain.value = echo;
-      gain.connect(send).connect(this.echo);
+      gain.connect(send).connect(this.bus.echo);
     }
     osc.start(t);
     osc.stop(t + duration + 0.1);
