@@ -39,13 +39,21 @@ export class SoundEngine {
     this.mood = mood;
   }
 
-  /** Call from a user gesture: creates the audio context on first use, and resumes it after an interruption (e.g. a call on iOS). */
+  /**
+   * Call from a user gesture: creates the audio context on first use, and resumes it after an
+   * interruption (e.g. a call on iOS). Returns true when this call is what started the sound.
+   */
   unlock() {
+    let started = false;
     this.guard(() => {
       if (!this.enabled) return;
-      if (!this.ctx) this.build();
+      if (!this.ctx) {
+        this.build();
+        started = true;
+      }
       this.update();
     });
+    return started;
   }
 
   setEnabled(on: boolean) {

@@ -23,6 +23,12 @@ type Options = {
 export function useSound({ src, tiles, slides, bumps, done }: Options) {
   const [enabled, setEnabled] = useState(true);
   const engineRef = useRef<SoundEngine | null>(null);
+  /**
+   * Whether the current gesture is the one that started the sound. Browsers keep the page silent
+   * until a first tap or key press, so the button shows "on" before anything plays; if that first
+   * press is on the sound button (or "M"), it should start the sound, not mute it.
+   */
+  const startedNow = useRef(false);
 
   const blank = tiles.length - 1;
   const placed = tiles.filter((t, i) => t === i && t !== blank).length;
@@ -31,6 +37,10 @@ export function useSound({ src, tiles, slides, bumps, done }: Options) {
   function toggle() {
     const engine = engineRef.current;
     if (!engine) return;
+    if (startedNow.current) {
+      startedNow.current = false;
+      return;
+    }
     const next = !enabled;
     setEnabled(next);
     writeJson(STORAGE_KEY, next);
@@ -47,7 +57,9 @@ export function useSound({ src, tiles, slides, bumps, done }: Options) {
     setEnabled(saved);
     engine.setEnabled(saved);
 
-    const unlock = () => engine.unlock();
+    const unlock = () => {
+      startedNow.current = engine.unlock();
+    };
     const onVisibility = () => engine.setVisible(!document.hidden);
     window.addEventListener("pointerdown", unlock, true);
     window.addEventListener("keydown", unlock, true);
