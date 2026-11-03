@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { ARTWORKS, ArtworkCaption, GalleryGrid, type Artwork } from "@/features/gallery";
-import { HintToggle, PuzzleBoard, PuzzleControls, PuzzleTimer, WinBanner, useHints, usePuzzle } from "@/features/puzzle";
+import { GRID_SIZES, HintToggle, PuzzleBoard, PuzzleControls, PuzzleTimer, WinBanner, useBest, useHints, usePuzzle } from "@/features/puzzle";
 import { SoundToggle, useSound } from "@/features/sound";
 import { ThemeToggle } from "@/features/theme";
 import { EditArtworkModal, UploadModal, useUploads, type ArtworkDetails, type NewUpload, type UploadedArtwork } from "@/features/uploads";
@@ -23,6 +23,8 @@ export function Game() {
   const modalOpen = adding || !!editing || !!deleting;
   const puzzle = usePuzzle({ size, puzzleKey: art.src, keyboard: !modalOpen, announce: setLive });
   const hints = useHints({ size, round: puzzle.round, locked: puzzle.done });
+  const bestLine = useBest({ size, round: puzzle.round, done: puzzle.done, secs: puzzle.secs, moves: puzzle.moves, hinted: hints.used });
+  const nextSize = GRID_SIZES[GRID_SIZES.indexOf(size) + 1];
   const sound = useSound({ src: art.src, tiles: puzzle.tiles, moves: puzzle.moves, bumps: puzzle.bumps, done: puzzle.done });
 
   const findUpload = (id: string) => uploads.find((u) => u.id === id) ?? null;
@@ -104,9 +106,11 @@ export function Game() {
           <WinBanner
             secs={puzzle.secs}
             moves={puzzle.moves}
-            credit={`${art.title}, ${art.artist}`}
             hints={hints.available ? (hints.used ? "used" : "unused") : undefined}
+            best={bestLine}
+            nextSize={nextSize}
             onNext={() => setSelected((selected + 1) % artworks.length)}
+            onTrySize={setSize}
           />
         )}
         {!puzzle.done && <p className="mt-4 text-[.8rem] text-mute">Tap a tile to slide it, or use the arrow keys.</p>}

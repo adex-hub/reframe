@@ -8,13 +8,17 @@ import { pickPraise } from "../data/praise";
 type Props = {
   secs: number;
   moves: number;
-  credit: string;
   /** Whether hints were used; left out where hints don't exist (3×3). */
   hints?: "used" | "unused";
+  /** A quiet line about the overall best for this grid size, if there's one to show. */
+  best: string | null;
+  /** The next grid size up, offered as a gentle step; left out at the largest size. */
+  nextSize?: number;
   onNext: () => void;
+  onTrySize: (size: number) => void;
 };
 
-export function WinBanner({ secs, moves, credit, hints, onNext }: Props) {
+export function WinBanner({ secs, moves, hints, best, nextSize, onNext, onTrySize }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   // Picked once per win, so it doesn't change while the card is open.
   const [praise] = useState(pickPraise);
@@ -30,8 +34,11 @@ export function WinBanner({ secs, moves, credit, hints, onNext }: Props) {
         {praise} You reframed it in {formatDuration(secs)} and {moves} {moves === 1 ? "move" : "moves"}
         {hints === "used" ? " using hints" : hints === "unused" ? " without hints" : ""}.
       </strong>
-      <p className="mt-1 mb-2.5 text-mute">{credit}</p>
-      <Button variant="primary" onClick={onNext}>Next picture</Button>
+      {best && <p className="mt-1 text-[.9rem] text-mute">{best}</p>}
+      <div className="mt-3 flex flex-wrap gap-2">
+        <Button variant="primary" onClick={onNext}>Next picture</Button>
+        {nextSize && <Button onClick={() => onTrySize(nextSize)}>Try {nextSize}×{nextSize}</Button>}
+      </div>
     </div>
   );
 }

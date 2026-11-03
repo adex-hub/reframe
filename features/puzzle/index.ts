@@ -3,5 +3,7 @@ export { PuzzleBoard } from "./components/puzzle-board";
 export { PuzzleControls } from "./components/puzzle-controls";
 export { PuzzleTimer } from "./components/puzzle-timer";
 export { WinBanner } from "./components/win-banner";
+export { GRID_SIZES } from "./constants";
+export { useBest } from "./hooks/use-best";
 export { useHints } from "./hooks/use-hints";
 export { usePuzzle } from "./hooks/use-puzzle";
