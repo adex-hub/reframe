@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Clarity } from "@/components/clarity";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,7 +18,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600&family=Space+Grotesk:wght@700&family=Newsreader:ital,wght@0,500;1,400&display=swap"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Clarity />
+      </body>
     </html>
   );
 }
