@@ -1,6 +1,23 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "reframe", "runtimeExecutable": "pnpm", "runtimeArgs": ["dev"], "port": 3000 }
+    {
+      "name": "reframe",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "dev"
+      ],
+      "port": 3000
+    },
+    {
+      "name": "reframe-prod",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "start",
+        "-p",
+        "3005"
+      ],
+      "port": 3005
+    }
   ]
 }
