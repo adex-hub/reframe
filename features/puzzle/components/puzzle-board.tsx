@@ -33,7 +33,7 @@ export function PuzzleBoard({ size: n, tiles, image, done, hints, onTap }: Props
             <button
               key={id}
               className={cx(
-                "absolute border-0 bg-panel bg-no-repeat p-0 shadow-[inset_0_0_0_2px_var(--bg)] group-data-won:shadow-[inset_0_0_0_0_var(--bg)]",
+                "absolute border-0 bg-panel bg-no-repeat p-0 shadow-[inset_0_0_0_1px_var(--bg)] group-data-won:shadow-[inset_0_0_0_0_var(--bg)]",
                 "transition-[left,top,box-shadow] duration-[.14s,.14s,.6s] ease-[ease] motion-reduce:transition-none",
                 isBlank && "invisible group-data-won:visible",
               )}
