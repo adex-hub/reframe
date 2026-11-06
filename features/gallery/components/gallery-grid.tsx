@@ -22,10 +22,12 @@ const STRIP =
   "flex snap-x snap-mandatory gap-2.5 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:contents";
 // Fades over the strip's edges, hinting that there are more artworks to swipe to.
 const FADE = "pointer-events-none absolute inset-y-0 w-12 from-canvas to-transparent transition-opacity duration-200 lg:hidden";
-const CELL = "relative w-[88px] flex-none snap-start lg:w-auto";
+const CELL = "relative w-[108px] flex-none snap-start lg:w-auto";
+// "Your artwork" is narrower on phones so the strip still shows two whole paintings and a peek of the next.
+const ADD_CELL = "relative w-[80px] flex-none lg:w-auto";
 const LIFT = "lg:transition-transform lg:duration-150 lg:hover:-translate-y-0.5 motion-reduce:transition-none";
 const CARD = "block overflow-hidden rounded-md border-2 border-transparent bg-panel p-0 text-left aria-pressed:border-accent";
-const THUMB = "block h-[72px] bg-cover bg-center lg:aspect-square lg:h-auto";
+const THUMB = "block h-[88px] bg-cover bg-center lg:aspect-square lg:h-auto";
 const LABEL = "block truncate px-1.5 py-1 text-[.72rem] text-mute lg:px-2.5 lg:py-2 lg:text-[.82rem]";
 const OVERLAY = "bg-[rgba(10,14,22,.62)] text-white backdrop-blur-[4px]";
 // A quiet "⋯" at the end of the caption row, sized to match the visibility badge.
@@ -98,9 +100,9 @@ export function GalleryGrid({ artworks, selected, onSelect, onAdd, onEdit, onDel
         <span className={cx(FADE, "left-0 bg-linear-to-r", !strip.before && "opacity-0")} aria-hidden="true" />
         <span className={cx(FADE, "right-0 bg-linear-to-l", !strip.after && "opacity-0")} aria-hidden="true" />
       </div>
-      <button className={cx(CELL, LIFT, CARD)} aria-label="Add your own artwork" onClick={onAdd}>
+      <button className={cx(ADD_CELL, LIFT, CARD)} aria-label="Add your own artwork" onClick={onAdd}>
         <span className={cx(THUMB, "grid place-items-center bg-canvas text-[2rem] text-mute")}>+</span>
-        <small className={LABEL}>Your artwork</small>
+        <small className={cx(LABEL, "px-1 lg:px-2.5")}>Your artwork</small>
       </button>
     </div>
   );
